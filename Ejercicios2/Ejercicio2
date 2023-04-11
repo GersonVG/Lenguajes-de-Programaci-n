@@ -1,0 +1,14 @@
+1)	Haciendo uso de la función filter, implemente una función que a partir de una lista de cadenas representando frases de parámetro, 
+filtre aquellas que contengan una palabra que el usuario indique en otro argumento (palabra completa contenida). Ej
+
+sub_cadenas “la” [“la casa; “el perro”; “pintando la cerca”]
+
+[“la casa, “pintando la cerca”]
+
+let sub_cadenas palabra listaFrases = // Aquí definimos la función sub_cadenas que toma dos argumentos
+    let palabraContenida frase = frase.Contains(palabra)
+    listaFrases |> List.filter palabraContenida
+
+let listaPrueba = ["la casa"; "el perro"; "pintando la cerca"]
+let resultado = sub_cadenas "la" listaPrueba
+printfn "%A" resultado // imprime ["la casa"; "pintando la cerca"]
