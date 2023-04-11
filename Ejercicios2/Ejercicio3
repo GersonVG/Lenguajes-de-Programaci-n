@@ -1,0 +1,23 @@
+2)	Construya una función que se llame general-sec A B. Esta función genera una secuencia de números en una lista de A hasta B, donde  A y B son números enteros.
+Por ejemplo:
+
+generar-sec 0 5
+[0; 1; 2; 3; 4; 5]
+
+
+// Definimos la función generalSec que toma dos enteros como argumentos
+let generalSec a b =
+    // Definimos la función auxiliar "loop" que toma un entero y una lista como argumentos
+    let rec loop i acc =
+        // Si el entero es menor o igual a "b", agregamos el entero a la lista y llamamos de nuevo a la función "loop" con el siguiente entero
+        if i <= b then
+            loop (i + 1) (i :: acc)
+        // Si el entero es mayor que "b", simplemente devolvemos la lista resultante
+        else
+            acc
+    // Llamamos a la función auxiliar "loop" con el primer entero "a" y la lista vacía
+    loop a []
+
+
+let resultado = generalSec 0 5
+printfn "%A" resultado
