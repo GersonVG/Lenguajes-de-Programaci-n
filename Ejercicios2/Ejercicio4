@@ -1,0 +1,58 @@
+type Producto = {
+    nombre: string
+    cantidad: int
+    precio: int
+}
+
+let lProductos = ref []
+
+let existenciaMinima = 10
+
+let agregarProducto nombre cantidad precio =
+    let buscarProducto nombre =
+        lProductos.Value
+        |> List.tryFindIndex (fun prod -> prod.nombre = nombre)
+        |> Option.defaultValue -1
+    let prod = buscarProducto nombre
+    if prod <> -1 then
+        lProductos.Value.[prod] <- {nombre = nombre; cantidad = lProductos.Value.[prod].cantidad + cantidad; precio = if lProductos.Value.[prod].precio <> precio then precio else lProductos.Value.[prod].precio}
+    else
+        lProductos.Value <- lProductos.Value @ [{nombre = nombre; cantidad = cantidad; precio = precio}]
+
+let venderProducto nombre =
+    let prod = buscarProducto nombre
+    if prod <> -1 then
+        lProductos.Value.[prod] <- {nombre = nombre; cantidad = lProductos.Value.[prod].cantidad - 1; precio = lProductos.Value.[prod].precio}
+        if lProductos.Value.[prod].cantidad <= 0 then
+            lProductos.Value <- List.filter (fun p -> p.nombre <> nombre) lProductos.Value
+
+let listarProductosMinimos () =
+    lProductos.Value
+    |> List.filter (fun prod -> prod.cantidad <= existenciaMinima)
+
+let totalFactura () =
+    lProductos.Value
+    |> List.fold (fun acc prod -> acc + (prod.cantidad * prod.precio)) 0
+
+let impuestoVentas () =
+    lProductos.Value
+    |> List.filter (fun prod -> prod.precio > 0)
+    |> List.fold (fun acc prod -> acc + ((prod.cantidad * prod.precio) * 0.13)) 0
+
+let imprimirLista () =
+    lProductos.Value
+    |> List.iter (fun prod -> printfn "%s, Cantidad: %d, Precio: %d" prod.nombre prod.cantidad prod.precio)
+
+let llenarDatos () =
+    agregarProducto "papas" 15 2500
+    agregarProducto "frijoles" 4 2000
+    agregarProducto "leche" 8 1200
+    agregarProducto "café" 12 4500
+
+let main () =
+    llenarDatos ()
+    imprimirLista ()
+    printfn "Total Factura: %d" (totalFactura ())
+    printfn "Impuesto de Ventas: %f" (impuestoVentas ())
+
+main ()
